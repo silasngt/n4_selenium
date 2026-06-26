@@ -1,0 +1,6 @@
+username;password;expected
+standard_user;secret_sauce;PASS
+standard_user;wrong_password;FAIL
+locked_out_user;secret_sauce;FAIL
+problem_user;secret_sauce;PASS
+abc;123456;FAIL

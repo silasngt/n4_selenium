@@ -1,35 +1,82 @@
-import sys, os
+import sys
+import os
+import csv
+import time
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.driver_factory import get_driver
 from selenium.webdriver.common.by import By
-import time
+
 
 def run_test():
-    print("--- Bắt đầu chạy TC02: Login Thất Bại ---")
-    driver = get_driver()
 
-    try:
-        driver.get("https://www.saucedemo.com/")
-        time.sleep(1)
+    print("=" * 65)
+    print("        Data-Driven Testing - Login Test")
+    print("=" * 65)
 
-        driver.find_element(By.ID, "user-name").send_keys("standard_user")
-        driver.find_element(By.ID, "password").send_keys("123456")
-        driver.find_element(By.ID, "login-button").click()
+    csv_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        "data",
+        "users.csv"
+    )
 
-        time.sleep(2)
+    with open(csv_path, newline='', encoding='utf-8') as file:
 
-        error_message = driver.find_element(By.CLASS_NAME, "error-message-container").text
+        reader = csv.DictReader(file, delimiter=';')
 
-        assert "Username and password do not match" in error_message
+        print(f"{'Username':<25}{'Expected':<12}{'Actual':<12}{'Result'}")
+        print("-" * 65)
 
-        print("[PASS] TC02: Hiển thị thông báo lỗi chính xác!")
+        total = 0
+        passed = 0
 
-    except Exception as e:
-        print(f"[FAIL] TC02 gặp lỗi: {e}")
+        for row in reader:
 
-    finally:
-        driver.quit()
+            username = row["username"]
+            password = row["password"]
+            expected = row["expected"]
+
+            driver = get_driver()
+
+            try:
+
+                driver.get("https://www.saucedemo.com/")
+                time.sleep(1)
+
+                driver.find_element(By.ID, "user-name").send_keys(username)
+                driver.find_element(By.ID, "password").send_keys(password)
+                driver.find_element(By.ID, "login-button").click()
+
+                time.sleep(2)
+
+                login_success = "inventory.html" in driver.current_url
+
+                actual = "PASS" if login_success else "FAIL"
+
+                result = "PASS" if actual == expected else "FAIL"
+
+                print(f"{username:<25}{expected:<12}{actual:<12}{result}")
+
+                total += 1
+                if result == "PASS":
+                    passed += 1
+
+            except Exception as e:
+
+                print(f"{username:<25}{expected:<12}{'ERROR':<12}FAIL")
+                print(f"Error: {e}")
+
+            finally:
+
+                driver.quit()
+
+        print("-" * 65)
+        print(f"Total Test Cases : {total}")
+        print(f"Passed           : {passed}")
+        print(f"Failed           : {total - passed}")
+        print("=" * 65)
+
 
 if __name__ == "__main__":
     run_test()
