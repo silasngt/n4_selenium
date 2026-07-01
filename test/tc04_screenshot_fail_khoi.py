@@ -40,14 +40,14 @@ def run_test():
         # 3. Thêm sản phẩm đầu tiên vào giỏ hàng
         add_buttons = driver.find_elements(By.CLASS_NAME, "btn_inventory")
         add_buttons[0].click()
-        time.sleep(5) # Dừng 5s để thấy sản phẩm được thêm vào giỏ hàng
+        time.sleep(3) # Dừng 3s để thấy sản phẩm được thêm vào giỏ hàng
         print("[INFO] Đã thêm sản phẩm vào giỏ hàng!")
  
         # 4. Vào giỏ hàng
         print("[INFO] Chuẩn bị vào giỏ hàng...")
         time.sleep(3) # Dừng 3s để thấy nút giỏ hàng
         driver.find_element(By.CLASS_NAME, "shopping_cart_link").click()
-        time.sleep(5) # Dừng 5s để thấy trang giỏ hàng
+        time.sleep(3) # Dừng 3s để thấy trang giỏ hàng
         print("[INFO] Đã vào giỏ hàng!")
  
         # 5. Nhấn Checkout

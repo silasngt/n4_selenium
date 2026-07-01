@@ -30,7 +30,7 @@ def parse_price_to_float(price_text):
 # ==============================================================================
 # TẦNG KIỂM THỬ CHÍNH
 # ==============================================================================
-def test_tc03_logic_calculation():
+def run_test():
     print("\n--- Bắt đầu chạy TC03: Kiểm thử Logic Tính toán & Xác minh Tài chính ---")
     driver = get_driver()
     wait = WebDriverWait(driver, 10)
@@ -67,35 +67,33 @@ def test_tc03_logic_calculation():
         
         item3_btn = wait.until(EC.element_to_be_clickable((By.ID, "add-to-cart-sauce-labs-bolt-t-shirt")))
         item3_btn.click()
-        time.sleep(2) # Chờ 2 giây sau khi chọn xong để nhìn rõ số lượng giỏ hàng nhảy lên 3
+        time.sleep(2) 
         
-        # ==============================================================================
-        # ĐOẠN ĐƯỢC LÀM CHẬM LẠI THEO YÊU CẦU
-        # ==============================================================================
+    
         # Bước 4: Vào Giỏ hàng và tiến hành Checkout
         print("[STEP] Vào giỏ hàng...")
         driver.find_element(By.CLASS_NAME, "shopping_cart_link").click()
-        time.sleep(2) # CHẬM LẠI: Dừng 2 giây tại trang giỏ hàng để kiểm tra danh sách món ăn
+        time.sleep(2) 
         
         print("[STEP] Nhấn nút Checkout...")
         checkout_btn = wait.until(EC.element_to_be_clickable((By.ID, "checkout")))
         checkout_btn.click()
-        time.sleep(2) # CHẬM LẠI: Dừng 2 giây sau khi nhấn Checkout để xem trang điền Form mở ra
+        time.sleep(2) 
         
         # Bước 5: Điền thông tin thông tin Checkout
         print("[STEP] Nhập thông tin thanh toán giả lập...")
         wait.until(EC.presence_of_element_located((By.ID, "first-name")))
         driver.find_element(By.ID, "first-name").send_keys("Nguyen")
-        time.sleep(0.5) # Nghỉ ngắn giữa các ô nhập cho giống người thật
+        time.sleep(0.5) 
         driver.find_element(By.ID, "last-name").send_keys("Tam Hy")
         time.sleep(0.5)
         driver.find_element(By.ID, "postal-code").send_keys("70000")
-        time.sleep(1.5) # Dừng 1.5 giây để nhìn rõ dữ liệu đã điền vào Form
+        time.sleep(1.5) 
         
         print("[STEP] Nhấn nút Continue...")
         continue_btn = driver.find_element(By.ID, "continue")
         continue_btn.click()
-        time.sleep(3) # CHẬM LẠI: Chờ hẳn 3 giây để hệ thống render hoàn chỉnh trang Summary hóa đơn
+        time.sleep(3) 
         
         # Bước 6: Lấy giá trị "Item total" thực tế hiển thị trên Web
         print("[STEP] Chờ hệ thống hiển thị hóa đơn tổng tiền...")
@@ -109,7 +107,7 @@ def test_tc03_logic_calculation():
         assert round(expected_total, 2) == round(actual_total, 2), f"Lỗi Logic! Tổng tính toán là {expected_total} nhưng web hiển thị {actual_total}"
         
         print(f"[PASS] TC03: Logic tính toán hoàn toàn CHÍNH XÁC (${expected_total} == ${actual_total})")
-        time.sleep(3) # CHẬM LẠI: Giữ màn hình PASS lại 3 giây trước khi tắt trình duyệt để chụp ảnh làm báo cáo
+        time.sleep(3) 
         
     except Exception as e:
         print(f"[FAIL] TC03 gặp lỗi: {e}")
@@ -118,4 +116,4 @@ def test_tc03_logic_calculation():
         driver.quit()
 
 if __name__ == "__main__":
-    test_tc03_logic_calculation()
+    run_test()
